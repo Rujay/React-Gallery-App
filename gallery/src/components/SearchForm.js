@@ -11,6 +11,7 @@ class SearchForm extends Component {
         this.setState({searchText: e.target.value})
     }
 
+    //handles the submit event of the search form
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.onSearch(this.query.value)
@@ -42,5 +43,5 @@ class SearchForm extends Component {
     }
 }
 
-
+//component wrapped with "withRouter" to get access to the history object
 export default withRouter(SearchForm);

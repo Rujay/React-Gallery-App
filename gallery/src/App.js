@@ -30,7 +30,7 @@ class App extends PureComponent {
       nature: [],
       puppies: [],
       cats: [],
-      query: [],
+      query: [], //holds user search query which is use for routing
       loading: true
     }
   }
@@ -41,7 +41,7 @@ class App extends PureComponent {
       loading: true
     });
     
-    //request for the comedy category
+    //request for the nature category
     axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=nature&per_page=24&format=json&nojsoncallback=1`)
       .then(res => {
         this.setState({
@@ -73,7 +73,7 @@ class App extends PureComponent {
 
       
   }
-
+  // Handles users search req
   handleSearch = (query) => {
 
     this.setState({
@@ -100,23 +100,22 @@ class App extends PureComponent {
 
           <SearchForm onSearch={this.handleSearch}/>
           <Nav />
-          {
-            (this.state.loading)
-            ? <p>Loading...</p> 
-            : <Switch>
-              <Route exact path="/" render={() => <Redirect to="/nature" /> } />
-              <Route path="/nature" render={() => <PhotoContainer data={this.state.nature} tag="Nature" />} />
-              <Route path="/cats" render={() => <PhotoContainer data={this.state.cats} tag="Cats" />} />
-              <Route path="/puppies" render={() => <PhotoContainer data={this.state.puppies} tag="Puppies" />} />
-              <Route path="/search/:query" render={() => <PhotoContainer data={this.state.pics} tag={this.state.query} />} />
+            {/* displays "Loading" when data is being fetched from the API */}
+            {
               
-            </Switch>
+              (this.state.loading)
+              ? <p>Loading...</p> 
+              : <Switch>
+                <Route exact path="/" render={() => <Redirect to="/nature" /> } />
+                <Route path="/nature" render={() => <PhotoContainer data={this.state.nature} tag="Nature" />} />
+                <Route path="/cats" render={() => <PhotoContainer data={this.state.cats} tag="Cats" />} />
+                <Route path="/puppies" render={() => <PhotoContainer data={this.state.puppies} tag="Puppies" />} />
+                <Route path="/search/:query" render={() => <PhotoContainer data={this.state.pics} tag={this.state.query} />} />
+                
+              </Switch>
 
-          }
-          
-          
-    
-    
+            }
+
         </div>
       </BrowserRouter>
     );
