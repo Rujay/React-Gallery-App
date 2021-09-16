@@ -4,7 +4,8 @@ import {
   BrowserRouter,
   Route,
   Switch,
-  Redirect
+  Redirect,
+  withRouter
 } from 'react-router-dom'
 //fetching tool
 import axios from 'axios';
@@ -13,6 +14,7 @@ import axios from 'axios';
 import SearchForm from './components/SearchForm'
 import Nav from './components/Nav'
 import PhotoContainer from './components/PhotoContainer'
+import ErrorNotFound from './components/ErrorNotFound'
 
 //apiKey
 import apiKey from './config'
@@ -93,6 +95,15 @@ class App extends PureComponent {
       })
   }
 
+  //Clicking the browser's forward and back buttons navigates the user through all search history, keeping the URL and fetched data in sync for all routes, including the search route.
+  componentDidUpdate(prevState) {
+    if (this.props.location.pathname.includes('search/')) {
+      if (this.props.location.pathname !== prevState.location.pathname) {
+        this.handleSearch(this.props.location.pathname.slice(8));
+      } 
+    }
+  }
+
   render () {
     return (
       <BrowserRouter>
@@ -111,7 +122,7 @@ class App extends PureComponent {
                 <Route path="/cats" render={() => <PhotoContainer data={this.state.cats} tag="Cats" />} />
                 <Route path="/puppies" render={() => <PhotoContainer data={this.state.puppies} tag="Puppies" />} />
                 <Route path="/search/:query" render={() => <PhotoContainer data={this.state.pics} tag={this.state.query} />} />
-                
+                <Route component={ErrorNotFound} />
               </Switch>
 
             }
@@ -124,4 +135,4 @@ class App extends PureComponent {
   
 }
 
-export default App;
+export default withRouter(App);
